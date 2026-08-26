@@ -1,4 +1,4 @@
-public class MIMIMEOW {
+public class MimiMeow {
     public static void main(String[] args) {
         String banner =
                   "      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )      \n"
@@ -10,7 +10,7 @@ public class MIMIMEOW {
                 + " ╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝ \n"
                 + "      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )      \n";
         System.out.println(banner);
-        System.out.println("Hello! I'm MIMIMEOW.");
+        System.out.println("Hello! I'm MimiMeow.");
         System.out.println("What can I do for you?");
         for (int i = 0; i < 16; i++) {
             System.out.print("-");

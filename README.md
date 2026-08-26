@@ -1,4 +1,4 @@
-# MIMIMEOW project template
+# MimiMeow project template
 
 This is a project template for a greenfield Java project. It's named after a cat named Mimi. Given below are instructions on how to use it.
 

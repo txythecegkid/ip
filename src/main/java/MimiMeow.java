@@ -1,5 +1,9 @@
+import java.util.Scanner;
+
 public class MimiMeow {
     public static void main(String[] args) {
+
+        String userInput;
         String banner =
                   "      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )      \n"
                 + " ███╗   ███╗██╗███╗   ███╗██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗\n"
@@ -10,16 +14,30 @@ public class MimiMeow {
                 + " ╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝ \n"
                 + "      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )      \n";
         System.out.println(banner);
-        System.out.println("Hello! I'm MimiMeow.");
-        System.out.println("What can I do for you?");
-        for (int i = 0; i < 16; i++) {
-            System.out.print("-");
+        printMimi("Hello! I'm MimiMeow.");
+        printMimi("What can I do for you?");
+        printMimi("─".repeat(60));
+        printMimi("");
+        Scanner in = new Scanner(System.in);
+
+        while (true) {
+            userInput = in.nextLine();
+            printMimi("─".repeat(60));
+            if (userInput.equals("bye")) {
+                break;
+            }
+            printMimi("(^._.^) says:");
+            printMimi(userInput);
+            printMimi("─".repeat(60));
         }
-        System.out.println();
-        System.out.println("Bye. Hope to see you again soon!");
-        for (int i = 0; i < 16; i++) {
-            System.out.print("-");
-        }
-        System.out.println();
+
+        printMimi("Bye. Hope to see you again soon!");
+        printMimi("─".repeat(60));
+        printMimi("");
+    }
+
+
+    private static void printMimi(String message) {
+        System.out.println("    " + message);
     }
 }

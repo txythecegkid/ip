@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 public class MimiMeow {
-    private static final String[] storedUI = new String[100];
-    private static int storedUICount = 0;
+    private static final Task[] storedTasks = new Task[100];
+    private static int storedTasksCount = 0;
 
     public static void main(String[] args) {
         String userInput;
@@ -23,52 +23,80 @@ public class MimiMeow {
         Scanner in = new Scanner(System.in);
 
         while (true) {
-            userInput = in.nextLine();
-            printwithIndent("─".repeat(60));
-            if (userInput.equals("bye")) {
-                break;
-            }
-            if (userInput.equals("list")) {
-                printSavedUI();
-            }else{
-                appendStoredUI(userInput);
-                printwithIndent("(^._.^) says:");
-                printMimiReply(userInput);
-            }
+            userInput = in.nextLine().trim();
 
+            String[] parts = userInput.split("\\s+", 2);
+            String command = parts[0];
             printwithIndent("─".repeat(60));
+            switch (command) {
+                case "bye":
+                    printwithIndent("Bye. Hope to see you again soon!");
+                    return;
+
+                case "list":
+                    printSavedTasks();
+                    break;
+
+                case "mark":
+                    if (parts.length < 2) {
+                        printwithIndent("Please specify a task number.");
+                    } else {
+                        markTask(parts[1]);
+                    }
+                    break;
+
+                case "unmark":
+                    if (parts.length < 2) {
+                        printwithIndent("Please specify a task number.");
+                    } else {
+                        unmarkTask(parts[1]);
+                    }
+                    break;
+
+                default:
+                    appendStoredTask(userInput);
+
+                    printMimiReply(userInput);
+                    break;
+            }
         }
-
-        printwithIndent("Bye. Hope to see you again soon!");
-        printwithIndent("─".repeat(60));
-        printwithIndent("");
     }
 
+    public static void appendStoredTask(String message) {
+        if (storedTasksCount < storedTasks.length) {
+            storedTasks[storedTasksCount] = new Task(message);
+            storedTasksCount++;
+        } else {
+            System.out.println("Storage is full.");
+        }
+    }
 
+    private static void markTask(String taskNumberText) {
+        int taskNumber = Integer.parseInt(taskNumberText);
+        storedTasks[taskNumber-1].setAsDone();
+        printwithIndent("Nice! Meow've marked this task as done:");
+        printwithIndent(storedTasks[taskNumber-1].toString());
+    }
+
+    private static void unmarkTask(String taskNumberText) {
+        int taskNumber = Integer.parseInt(taskNumberText);
+        storedTasks[taskNumber-1].setAsNotDone();
+        printwithIndent("OK, Meow've marked this task as not done yet:");
+        printwithIndent(storedTasks[taskNumber-1].toString());
+    }
     private static void printwithIndent(String message) {
         System.out.println("    " + message);
     }
 
     private static void printMimiReply(String message) {
-        System.out.println("    added: " + message);
+        printwithIndent("(^._.^) meows:");
+        printwithIndent("added: " + message);
     }
 
-    private static void printSavedUI() {
-        for (int i = 0; i < storedUICount; i++) {
-            printwithIndent((i+1) + "." + storedUI[i]);
-        }
-    }
-
-    public static String [] getStoredUI() {
-        return storedUI;
-    }
-
-    public static void appendStoredUI(String message) {
-        if (storedUICount < storedUI.length) {
-            storedUI[storedUICount] = message;
-            storedUICount++;
-        } else {
-            System.out.println("Storage is full.");
+    private static void printSavedTasks() {
+        printwithIndent("Here are the tasks in your list:");
+        for (int i = 0; i < storedTasksCount; i++) {
+            printwithIndent((i + 1) + ". " + storedTasks[i]);
         }
     }
 }

@@ -1,5 +1,8 @@
+package mimimeow;
+
 import java.util.Scanner;
 
+/** Runs the MimiMeow command-line task manager. */
 public class MimiMeow {
     private static final Task[] storedTasks = new Task[100];
     private static int storedTasksCount = 0;
@@ -16,10 +19,10 @@ public class MimiMeow {
                 + " ╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝ \n"
                 + "      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )      \n";
         System.out.println(banner);
-        printwithIndent("Hello! I'm MimiMeow.");
-        printwithIndent("What can I do for you?");
-        printwithIndent("─".repeat(60));
-        printwithIndent("");
+        printWithIndent("Hello! I'm MimiMeow.");
+        printWithIndent("What can I do for you?");
+        printWithIndent("─".repeat(60));
+        printWithIndent("");
         Scanner in = new Scanner(System.in);
 
         while (true) {
@@ -27,11 +30,11 @@ public class MimiMeow {
 
             String[] parts = userInput.split("\\s+", 2);
             String command = parts[0];
-            printwithIndent("─".repeat(60));
+            printWithIndent("─".repeat(60));
             switch (command) {
                 case "bye":
-                    printwithIndent("Bye. Hope to see you again soon!");
-                    printwithIndent("─".repeat(60));
+                    printWithIndent("Bye. Hope to see you again soon!");
+                    printWithIndent("─".repeat(60));
                     return;
 
                 case "list":
@@ -40,7 +43,7 @@ public class MimiMeow {
 
                 case "mark":
                     if (parts.length < 2) {
-                        printwithIndent("Please specify a task number.");
+                        printWithIndent("Please specify a task number.");
                     } else {
                         markTask(parts[1]);
                     }
@@ -48,7 +51,7 @@ public class MimiMeow {
 
                 case "unmark":
                     if (parts.length < 2) {
-                        printwithIndent("Please specify a task number.");
+                        printWithIndent("Please specify a task number.");
                     } else {
                         unmarkTask(parts[1]);
                     }
@@ -60,10 +63,11 @@ public class MimiMeow {
                     printMimiReply(userInput);
                     break;
             }
-            printwithIndent("─".repeat(60));
+            printWithIndent("─".repeat(60));
         }
     }
 
+    /** Adds a new task to the task list if storage is available. */
     public static void appendStoredTask(String message) {
         if (storedTasksCount < storedTasks.length) {
             storedTasks[storedTasksCount] = new Task(message);
@@ -77,44 +81,44 @@ public class MimiMeow {
 
         int taskNumber = Integer.parseInt(taskNumberText);
         if (taskNumber > storedTasksCount) {
-            printwithIndent("Meow has no idea what task " + taskNumber + " is.");
-        }else {
+            printWithIndent("Meow has no idea what task " + taskNumber + " is.");
+        } else {
             storedTasks[taskNumber - 1].setAsDone();
-            printwithIndent("Nice! Meow've marked this task as done:");
-            printwithIndent(storedTasks[taskNumber - 1].toString());
+            printWithIndent("Nice! Meow've marked this task as done:");
+            printWithIndent(storedTasks[taskNumber - 1].toString());
         }
     }
 
     private static void unmarkTask(String taskNumberText) {
         int taskNumber = Integer.parseInt(taskNumberText);
         if (taskNumber > storedTasksCount) {
-            printwithIndent("Meow has no idea what task " + taskNumber + " is.");
-        }else {
+            printWithIndent("Meow has no idea what task " + taskNumber + " is.");
+        } else {
             storedTasks[taskNumber - 1].setAsNotDone();
-            printwithIndent("OK, Meow've marked this task as not done yet:");
-            printwithIndent(storedTasks[taskNumber - 1].toString());
+            printWithIndent("OK, Meow've marked this task as not done yet:");
+            printWithIndent(storedTasks[taskNumber - 1].toString());
         }
     }
-    private static void printwithIndent(String message) {
+    private static void printWithIndent(String message) {
         System.out.println("    " + message);
     }
 
     private static void printMimiReply(String message) {
-        printwithIndent("(^._.^) meows:");
-        printwithIndent("added: " + message);
+        printWithIndent("(^._.^) meows:");
+        printWithIndent("added: " + message);
     }
 
     private static void printSavedTasks() {
-        if (storedTasksCount > 1){
-            printwithIndent("Here are the tasks in your list:");
-        }else if (storedTasksCount == 1){
-            printwithIndent("Here is the task in your list:");
-        }else{
-            printwithIndent("There is no task in you list yet!");
+        if (storedTasksCount > 1) {
+            printWithIndent("Here are the tasks in your list:");
+        } else if (storedTasksCount == 1) {
+            printWithIndent("Here is the task in your list:");
+        } else {
+            printWithIndent("There are no tasks in your list yet!");
         }
 
         for (int i = 0; i < storedTasksCount; i++) {
-            printwithIndent((i + 1) + ". " + storedTasks[i]);
+            printWithIndent((i + 1) + ". " + storedTasks[i]);
         }
     }
 }

@@ -31,6 +31,7 @@ public class MimiMeow {
             switch (command) {
                 case "bye":
                     printwithIndent("Bye. Hope to see you again soon!");
+                    printwithIndent("─".repeat(60));
                     return;
 
                 case "list":
@@ -59,6 +60,7 @@ public class MimiMeow {
                     printMimiReply(userInput);
                     break;
             }
+            printwithIndent("─".repeat(60));
         }
     }
 
@@ -72,17 +74,26 @@ public class MimiMeow {
     }
 
     private static void markTask(String taskNumberText) {
+
         int taskNumber = Integer.parseInt(taskNumberText);
-        storedTasks[taskNumber-1].setAsDone();
-        printwithIndent("Nice! Meow've marked this task as done:");
-        printwithIndent(storedTasks[taskNumber-1].toString());
+        if (taskNumber > storedTasksCount) {
+            printwithIndent("Meow has no idea what task " + taskNumber + " is.");
+        }else {
+            storedTasks[taskNumber - 1].setAsDone();
+            printwithIndent("Nice! Meow've marked this task as done:");
+            printwithIndent(storedTasks[taskNumber - 1].toString());
+        }
     }
 
     private static void unmarkTask(String taskNumberText) {
         int taskNumber = Integer.parseInt(taskNumberText);
-        storedTasks[taskNumber-1].setAsNotDone();
-        printwithIndent("OK, Meow've marked this task as not done yet:");
-        printwithIndent(storedTasks[taskNumber-1].toString());
+        if (taskNumber > storedTasksCount) {
+            printwithIndent("Meow has no idea what task " + taskNumber + " is.");
+        }else {
+            storedTasks[taskNumber - 1].setAsNotDone();
+            printwithIndent("OK, Meow've marked this task as not done yet:");
+            printwithIndent(storedTasks[taskNumber - 1].toString());
+        }
     }
     private static void printwithIndent(String message) {
         System.out.println("    " + message);
@@ -94,7 +105,14 @@ public class MimiMeow {
     }
 
     private static void printSavedTasks() {
-        printwithIndent("Here are the tasks in your list:");
+        if (storedTasksCount > 1){
+            printwithIndent("Here are the tasks in your list:");
+        }else if (storedTasksCount == 1){
+            printwithIndent("Here is the task in your list:");
+        }else{
+            printwithIndent("There is no task in you list yet!");
+        }
+
         for (int i = 0; i < storedTasksCount; i++) {
             printwithIndent((i + 1) + ". " + storedTasks[i]);
         }

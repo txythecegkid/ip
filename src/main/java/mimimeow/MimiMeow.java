@@ -74,7 +74,7 @@ public class MimiMeow {
                 break;
 
             default:
-                addTaskAndReply(userInput);
+                addTaskAndReply(new Todo(userInput));
                 break;
         }
 
@@ -113,49 +113,54 @@ public class MimiMeow {
         }
     }
 
-    private static void addTodo(String toDoTask) {
-        addTaskAndReply(toDoTask);
+    private static void addTodo(String commandArguments) {
+        String description = commandArguments.trim();
+
+        addTaskAndReply(new Todo(description));
     }
 
-    private static void addDeadline(String commandArgs) {
-        String[] deadlineTaskAndDate = commandArgs.split("\\s*/by\\s+", 2);
-        String deadlineTask = deadlineTaskAndDate[0];
-        String deadlineDate = deadlineTaskAndDate[1];
+    private static void addDeadline(String commandArguments) {
+        String[] deadlineParts = commandArguments.split("\\s*/by\\s+", 2);
 
-        String displayMessage = deadlineTask + " (by: " + deadlineDate + ")";
-        addTaskAndReply(displayMessage);
+        if (deadlineParts.length < 2) {
+            printWithIndent("Please use: deadline description /by date");
+            return;
+        }
+
+        String description = deadlineParts[0].trim();
+        String deadlineDate = deadlineParts[1].trim();
+
+        addTaskAndReply(new Deadline(description, deadlineDate));
     }
 
-    private static void addEvent(String commandArgs) {
-        String[] eventParts = commandArgs.split("\\s*/from\\s+", 2);
+    private static void addEvent(String commandArguments) {
+        String[] eventParts = commandArguments.split("\\s*/from\\s+", 2);
 
         if (eventParts.length < 2) {
-            printWithIndent("Please use: event description /eventStart start /to end");
+            printWithIndent("Please use: event description /from start /to end");
             return;
         }
 
-        String eventDescription = eventParts[0].trim();
+        String description = eventParts[0].trim();
+        String[] timeParts = eventParts[1].split("\\s*/to\\s+", 2);
 
-        String[] eventTime = eventParts[1].split("\\s*/to\\s+", 2);
-
-        if (eventTime.length < 2) {
-            printWithIndent("Please provide both /eventStart and /to times.");
+        if (timeParts.length < 2) {
+            printWithIndent("Please provide both /from and /to times.");
             return;
         }
 
-        String eventStartTime = eventTime[0].trim();
-        String eventEndTime = eventTime[1].trim();
+        String startTime = timeParts[0].trim();
+        String endTime = timeParts[1].trim();
 
-        String displayMessage = eventDescription + " (from: " + eventStartTime + " to: " + eventEndTime + ")";
-        addTaskAndReply(displayMessage);
+        addTaskAndReply(new Event(description, startTime, endTime));
     }
 
     /**
      * Adds the user's input as a task and prints MimiMeow's response.
      */
-    private static void addTaskAndReply(String taskDescription) {
-        addTask(taskDescription);
-        printMimiReply(taskDescription);
+    private static void addTaskAndReply(Task task) {
+        addTask(task);
+        printMimiReply(task.toString());
     }
 
     /**
@@ -202,9 +207,9 @@ public class MimiMeow {
     }
 
     /** Adds a new task to the task list if storage is available. */
-    public static void addTask(String message) {
+    public static void addTask(Task task) {
         if (taskCount < storedTasks.length) {
-            storedTasks[taskCount] = new Task(message);
+            storedTasks[taskCount] = task;
             taskCount++;
         } else {
             System.out.println("Storage is full.");

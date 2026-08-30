@@ -36,8 +36,10 @@ public class MimiMeow {
      * @return true if the application should exit, otherwise false
      */
     private static boolean executeCommand(String userInput) {
+
         String[] commandParts = userInput.split("\\s+", 2);
         String commandWord = commandParts[0];
+        String commandArgs = commandParts.length > 1 ? commandParts[1] : "";
 
         printSeparator();
 
@@ -57,6 +59,18 @@ public class MimiMeow {
 
             case "unmark":
                 unmarkTaskFromInput(commandParts);
+                break;
+
+            case "todo":
+                addTodo(commandArgs);
+                break;
+
+            case "deadline":
+                addDeadline(commandArgs);
+                break;
+
+            case "event":
+                addEvent(commandArgs);
                 break;
 
             default:
@@ -99,15 +113,49 @@ public class MimiMeow {
         }
     }
 
+    private static void addTodo(String toDoTask) {
+        addTaskAndReply(toDoTask);
+    }
+
+    private static void addDeadline(String commandArgs) {
+        String[] deadlineTaskAndDate = commandArgs.split("\\s*/by\\s+", 2);
+        String deadlineTask = deadlineTaskAndDate[0];
+        String deadlineDate = deadlineTaskAndDate[1];
+
+        String displayMessage = deadlineTask + " (by: " + deadlineDate + ")";
+        addTaskAndReply(displayMessage);
+    }
+
+    private static void addEvent(String commandArgs) {
+        String[] eventParts = commandArgs.split("\\s*/from\\s+", 2);
+
+        if (eventParts.length < 2) {
+            printWithIndent("Please use: event description /eventStart start /to end");
+            return;
+        }
+
+        String eventDescription = eventParts[0].trim();
+
+        String[] eventTime = eventParts[1].split("\\s*/to\\s+", 2);
+
+        if (eventTime.length < 2) {
+            printWithIndent("Please provide both /eventStart and /to times.");
+            return;
+        }
+
+        String eventStartTime = eventTime[0].trim();
+        String eventEndTime = eventTime[1].trim();
+
+        String displayMessage = eventDescription + " (from: " + eventStartTime + " to: " + eventEndTime + ")";
+        addTaskAndReply(displayMessage);
+    }
+
     /**
      * Adds the user's input as a task and prints MimiMeow's response.
-     *
-     * @param userInput task description entered by the user
      */
-    private static void addTaskAndReply(String userInput) {
-        addTask(userInput);
-
-        printMimiReply(userInput);
+    private static void addTaskAndReply(String taskDescription) {
+        addTask(taskDescription);
+        printMimiReply(taskDescription);
     }
 
     /**
@@ -211,7 +259,8 @@ public class MimiMeow {
      * @param message task description entered by the user
      */
     private static void printMimiReply(String message) {
-        printWithIndent("(^._.^) meows:");
+        printWithIndent("(^._.^) meows: Got it! Meow'hv added this task:");
+
         printWithIndent("added: " + message);
     }
 

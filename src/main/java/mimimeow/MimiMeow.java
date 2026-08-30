@@ -222,15 +222,7 @@ public class MimiMeow {
      * @param taskNumberText text representing the task number
      */
     private static void markTask(String taskNumberText) {
-
-        int taskNumber = Integer.parseInt(taskNumberText);
-        if (taskNumber > taskCount) {
-            printWithIndent("Meow has no idea what task " + taskNumber + " is.");
-        } else {
-            storedTasks[taskNumber - 1].setAsDone();
-            printWithIndent("Nice! Meow've marked this task as done:");
-            printWithIndent(storedTasks[taskNumber - 1].toString());
-        }
+        updateTaskStatus(taskNumberText, true);
     }
 
     /**
@@ -239,13 +231,24 @@ public class MimiMeow {
      * @param taskNumberText text representing the task number
      */
     private static void unmarkTask(String taskNumberText) {
+        updateTaskStatus(taskNumberText, false);
+    }
+
+    /** Updates a task's completion status and prints the corresponding response. */
+    private static void updateTaskStatus(String taskNumberText, boolean isDone) {
         int taskNumber = Integer.parseInt(taskNumberText);
         if (taskNumber > taskCount) {
             printWithIndent("Meow has no idea what task " + taskNumber + " is.");
         } else {
-            storedTasks[taskNumber - 1].setAsNotDone();
-            printWithIndent("OK, Meow've marked this task as not done yet:");
-            printWithIndent(storedTasks[taskNumber - 1].toString());
+            Task task = storedTasks[taskNumber - 1];
+            if (isDone) {
+                task.setAsDone();
+                printWithIndent("Nice! Meow've marked this task as done:");
+            } else {
+                task.setAsNotDone();
+                printWithIndent("OK, Meow've marked this task as not done yet:");
+            }
+            printWithIndent(task.toString());
         }
     }
 

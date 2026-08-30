@@ -261,12 +261,18 @@ public class MimiMeow {
     /**
      * Prints MimiMeow's response after a task has been added.
      *
-     * @param message task description entered by the user
+     * @param TaskDescription description entered by the user
      */
-    private static void printMimiReply(String message) {
+    private static void printMimiReply(String TaskDescription) {
         printWithIndent("(^._.^) meows: Got it! Meow'hv added this task:");
 
-        printWithIndent("added: " + message);
+        printWithIndent(TaskDescription);
+        if(taskCount == 1){
+            printWithIndent("NOW you have 1 task in the list.");
+        }else{
+            printWithIndent("NOW you have " + taskCount + " tasks in the list.");
+        }
+
     }
 
     /** Prints all tasks currently stored in the task list. */

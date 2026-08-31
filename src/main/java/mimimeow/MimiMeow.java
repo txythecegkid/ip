@@ -5,6 +5,7 @@ import java.util.Scanner;
 /** Runs the MimiMeow command-line task manager. */
 public class MimiMeow {
     private static final TaskList taskList = new TaskList();
+    private static final CommandParser commandParser = new CommandParser();
 
     /** Starts the MimiMeow command-line application. */
     static void main(String[] args) {
@@ -35,10 +36,9 @@ public class MimiMeow {
      * @return true if the application should exit, otherwise false
      */
     private static boolean executeCommand(String userInput) {
-
-        String[] commandParts = userInput.split("\\s+", 2);
-        String commandWord = commandParts[0];
-        String commandArgs = commandParts.length > 1 ? commandParts[1] : "";
+        Command command = commandParser.parse(userInput);
+        String commandWord = command.getWord();
+        String commandArgs = command.getArguments();
 
         printSeparator();
 
@@ -53,11 +53,11 @@ public class MimiMeow {
                 break;
 
             case "mark":
-                markTaskFromInput(commandParts);
+                markTaskFromInput(commandArgs);
                 break;
 
             case "unmark":
-                unmarkTaskFromInput(commandParts);
+                unmarkTaskFromInput(commandArgs);
                 break;
 
             case "todo":
@@ -91,11 +91,11 @@ public class MimiMeow {
      *
      * @param commandParts command and task number entered by the user
      */
-    private static void markTaskFromInput(String[] commandParts) {
-        if (commandParts.length < 2) {
+    private static void markTaskFromInput(String commandArguments) {
+        if (commandArguments.isEmpty()) {
             printWithIndent("Please specify a task number.");
         } else {
-            markTask(commandParts[1]);
+            markTask(commandArguments);
         }
     }
 
@@ -104,11 +104,11 @@ public class MimiMeow {
      *
      * @param commandParts command and task number entered by the user
      */
-    private static void unmarkTaskFromInput(String[] commandParts) {
-        if (commandParts.length < 2) {
+    private static void unmarkTaskFromInput(String commandArguments) {
+        if (commandArguments.isEmpty()) {
             printWithIndent("Please specify a task number.");
         } else {
-            unmarkTask(commandParts[1]);
+            unmarkTask(commandArguments);
         }
     }
 

@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 /** Runs the MimiMeow command-line task manager. */
 public class MimiMeow {
-    private static final Task[] storedTasks = new Task[100];
-    private static int taskCount = 0;
+    private static final TaskList taskList = new TaskList();
 
     /** Starts the MimiMeow command-line application. */
     static void main(String[] args) {
@@ -208,12 +207,7 @@ public class MimiMeow {
 
     /** Adds a new task to the task list if storage is available. */
     public static void addTask(Task task) {
-        if (taskCount < storedTasks.length) {
-            storedTasks[taskCount] = task;
-            taskCount++;
-        } else {
-            System.out.println("Storage is full.");
-        }
+        taskList.add(task);
     }
 
     /**
@@ -237,10 +231,10 @@ public class MimiMeow {
     /** Updates a task's completion status and prints the corresponding response. */
     private static void updateTaskStatus(String taskNumberText, boolean isDone) {
         int taskNumber = Integer.parseInt(taskNumberText);
-        if (taskNumber > taskCount) {
+        if (taskNumber > taskList.size()) {
             printWithIndent("Meow has no idea what task " + taskNumber + " is.");
         } else {
-            Task task = storedTasks[taskNumber - 1];
+            Task task = taskList.get(taskNumber - 1);
             if (isDone) {
                 task.setAsDone();
                 printWithIndent("Nice! Meow've marked this task as done:");
@@ -270,26 +264,26 @@ public class MimiMeow {
         printWithIndent("(^._.^) meows: Got it! Meow'hv added this task:");
 
         printWithIndent(TaskDescription);
-        if(taskCount == 1){
+        if (taskList.size() == 1) {
             printWithIndent("NOW you have 1 task in the list.");
-        }else{
-            printWithIndent("NOW you have " + taskCount + " tasks in the list.");
+        } else {
+            printWithIndent("NOW you have " + taskList.size() + " tasks in the list.");
         }
 
     }
 
     /** Prints all tasks currently stored in the task list. */
     private static void printTaskList() {
-        if (taskCount > 1) {
+        if (taskList.size() > 1) {
             printWithIndent("Here are the tasks in your list:");
-        } else if (taskCount == 1) {
+        } else if (taskList.size() == 1) {
             printWithIndent("Here is the task in your list:");
         } else {
             printWithIndent("There are no tasks in your list yet!");
         }
 
-        for (int i = 0; i < taskCount; i++) {
-            printWithIndent((i + 1) + ". " + storedTasks[i]);
+        for (int i = 0; i < taskList.size(); i++) {
+            printWithIndent((i + 1) + ". " + taskList.get(i));
         }
     }
 }

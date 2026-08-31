@@ -89,7 +89,7 @@ public class MimiMeow {
     /**
      * Marks the task specified in a parsed command as completed.
      *
-     * @param commandParts command and task number entered by the user
+     * @param commandArguments task number entered by the user
      */
     private static void markTaskFromInput(String commandArguments) {
         if (commandArguments.isEmpty()) {
@@ -100,9 +100,9 @@ public class MimiMeow {
     }
 
     /**
-     * Marks the task specified in a parsed command as incomplete.
+     * Unmark the task specified in a parsed command as incomplete.
      *
-     * @param commandParts command and task number entered by the user
+     * @param commandArguments task number entered by the user
      */
     private static void unmarkTaskFromInput(String commandArguments) {
         if (commandArguments.isEmpty()) {
@@ -258,12 +258,12 @@ public class MimiMeow {
     /**
      * Prints MimiMeow's response after a task has been added.
      *
-     * @param TaskDescription description entered by the user
+     * @param taskDescription description entered by the user
      */
-    private static void printMimiReply(String TaskDescription) {
+    private static void printMimiReply(String taskDescription) {
         printWithIndent("(^._.^) meows: Got it! Meow'hv added this task:");
 
-        printWithIndent(TaskDescription);
+        printWithIndent(taskDescription);
         if (taskList.size() == 1) {
             printWithIndent("NOW you have 1 task in the list.");
         } else {

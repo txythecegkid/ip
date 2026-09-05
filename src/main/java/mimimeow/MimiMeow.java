@@ -36,45 +36,40 @@ public class MimiMeow {
      * @return true if the application should exit, otherwise false
      */
     private static boolean executeCommand(String userInput) {
-        Command command = commandParser.parse(userInput);
-        String commandWord = command.getWord();
-        String commandArgs = command.getArguments();
-
         printSeparator();
+        try {
+            Command command = commandParser.parse(userInput);
+            String commandWord = command.getWord();
+            String commandArgs = command.getArguments();
 
-        switch (commandWord) {
-            case "bye":
-                printGoodbyeMessage();
-                printSeparator();
-                return true;
-
-            case "list":
-                printTaskList();
-                break;
-
-            case "mark":
-                markTaskFromInput(commandArgs);
-                break;
-
-            case "unmark":
-                unmarkTaskFromInput(commandArgs);
-                break;
-
-            case "todo":
-                addTodo(commandArgs);
-                break;
-
-            case "deadline":
-                addDeadline(commandArgs);
-                break;
-
-            case "event":
-                addEvent(commandArgs);
-                break;
-
-            default:
-                addTaskAndReply(new Todo(userInput));
-                break;
+            switch (commandWord) {
+                case "bye":
+                    printGoodbyeMessage();
+                    printSeparator();
+                    return true;
+                case "list":
+                    printTaskList();
+                    break;
+                case "mark":
+                    markTaskFromInput(commandArgs);
+                    break;
+                case "unmark":
+                    unmarkTaskFromInput(commandArgs);
+                    break;
+                case "todo":
+                    addTodo(commandArgs);
+                    break;
+                case "deadline":
+                    addDeadline(commandArgs);
+                    break;
+                case "event":
+                    addEvent(commandArgs);
+                    break;
+                default:
+                    throw new MimiMeowException("Mimi does not recognise that command. Try todo, list, mark, or bye.");
+            }
+        } catch (MimiMeowException exception) {
+            printWithIndent("Miiiision impossible! " + exception.getMessage());
         }
 
         printSeparator();
@@ -93,7 +88,7 @@ public class MimiMeow {
      */
     private static void markTaskFromInput(String commandArguments) {
         if (commandArguments.isEmpty()) {
-            printWithIndent("Please specify a task number.");
+            throw new MimiMeowException("Mimi needs a task number to mark, meow.");
         } else {
             markTask(commandArguments);
         }
@@ -106,7 +101,7 @@ public class MimiMeow {
      */
     private static void unmarkTaskFromInput(String commandArguments) {
         if (commandArguments.isEmpty()) {
-            printWithIndent("Please specify a task number.");
+            throw new MimiMeowException("Mimi needs a task number to unmark, meow.");
         } else {
             unmarkTask(commandArguments);
         }
@@ -114,7 +109,9 @@ public class MimiMeow {
 
     private static void addTodo(String commandArguments) {
         String description = commandArguments.trim();
-
+        if (description.isEmpty()) {
+            throw new MimiMeowException("This todo is as empty as Mimi's food bowl. Add a description, meow.");
+        }
         addTaskAndReply(new Todo(description));
     }
 
@@ -122,12 +119,14 @@ public class MimiMeow {
         String[] deadlineParts = commandArguments.split("\\s*/by\\s+", 2);
 
         if (deadlineParts.length < 2) {
-            printWithIndent("Please use: deadline description /by date");
-            return;
+            throw new MimiMeowException("Mimi needs a deadline description and date. Try: deadline description /by date.");
         }
 
         String description = deadlineParts[0].trim();
         String deadlineDate = deadlineParts[1].trim();
+        if (description.isEmpty() || deadlineDate.isEmpty()) {
+            throw new MimiMeowException("A deadline needs both a description and a date, meow.");
+        }
 
         addTaskAndReply(new Deadline(description, deadlineDate));
     }
@@ -136,20 +135,21 @@ public class MimiMeow {
         String[] eventParts = commandArguments.split("\\s*/from\\s+", 2);
 
         if (eventParts.length < 2) {
-            printWithIndent("Please use: event description /from start /to end");
-            return;
+            throw new MimiMeowException("Mimi needs an event description, start, and end. Try: event description /from start /to end.");
         }
 
         String description = eventParts[0].trim();
         String[] timeParts = eventParts[1].split("\\s*/to\\s+", 2);
 
         if (timeParts.length < 2) {
-            printWithIndent("Please provide both /from and /to times.");
-            return;
+            throw new MimiMeowException("Mimi needs both /from and /to times for this event.");
         }
 
         String startTime = timeParts[0].trim();
         String endTime = timeParts[1].trim();
+        if (description.isEmpty() || startTime.isEmpty() || endTime.isEmpty()) {
+            throw new MimiMeowException("This event needs a description, start time, and end time");
+        }
 
         addTaskAndReply(new Event(description, startTime, endTime));
     }
@@ -230,9 +230,14 @@ public class MimiMeow {
 
     /** Updates a task's completion status and prints the corresponding response. */
     private static void updateTaskStatus(String taskNumberText, boolean isDone) {
-        int taskNumber = Integer.parseInt(taskNumberText);
-        if (taskNumber > taskList.size()) {
-            printWithIndent("Meow has no idea what task " + taskNumber + " is.");
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(taskNumberText);
+        } catch (NumberFormatException exception) {
+            throw new MimiMeowException("The task number must be a positive whole number.");
+        }
+        if (taskNumber < 1 || taskNumber > taskList.size()) {
+            throw new MimiMeowException("Mimi cannot find task " + taskNumber + ". Check the task number");
         } else {
             Task task = taskList.get(taskNumber - 1);
             if (isDone) {

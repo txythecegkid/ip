@@ -1,4 +1,4 @@
-package mimimeow;
+package mimimeow.command;
 
 /** Represents a parsed MimiMeow command and its optional arguments. */
 public class Command {

@@ -1,4 +1,4 @@
-package mimimeow;
+package mimimeow.command;
 
 /** Converts raw user input into structured MimiMeow commands. */
 public class CommandParser {

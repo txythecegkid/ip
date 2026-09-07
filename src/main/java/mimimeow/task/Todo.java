@@ -1,4 +1,4 @@
-package mimimeow;
+package mimimeow.task;
 
 /** Represents a todo task without a specific deadline or time period. */
 public class Todo extends Task {

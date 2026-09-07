@@ -1,4 +1,7 @@
-package mimimeow;
+package mimimeow.ui;
+
+import mimimeow.task.Task;
+import mimimeow.task.TaskList;
 
 import java.util.Scanner;
 

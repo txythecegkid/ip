@@ -1,4 +1,7 @@
-package mimimeow;
+package mimimeow.command;
+
+import mimimeow.task.*;
+import mimimeow.ui.MimiMeowUi;
 
 /** Executes parsed MimiMeow commands and updates the task list. */
 public class CommandHandler {

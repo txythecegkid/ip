@@ -1,4 +1,4 @@
-package mimimeow;
+package mimimeow.task;
 
 /** Stores and manages the tasks created in MimiMeow. */
 public class TaskList {

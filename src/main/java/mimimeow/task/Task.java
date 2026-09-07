@@ -1,8 +1,8 @@
-package mimimeow;
+package mimimeow.task;
 
 /** Represents a task in MimiMeow's task list. */
-public class Task {
-    private String description;
+public abstract class Task {
+    private final String description;
     private boolean isDone;
 
     /** Creates a task with the specified description. */

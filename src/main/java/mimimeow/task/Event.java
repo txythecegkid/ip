@@ -1,4 +1,4 @@
-package mimimeow;
+package mimimeow.task;
 
 /** Represents a task that takes place during a specified time period. */
 public class Event extends Task {

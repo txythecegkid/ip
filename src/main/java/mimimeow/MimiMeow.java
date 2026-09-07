@@ -1,5 +1,10 @@
 package mimimeow;
 
+import mimimeow.command.CommandHandler;
+import mimimeow.command.CommandParser;
+import mimimeow.task.TaskList;
+import mimimeow.ui.MimiMeowUi;
+
 import java.util.Scanner;
 
 /** Runs the MimiMeow command-line task manager. */

@@ -1,6 +1,10 @@
 package mimimeow.command;
 
-import mimimeow.task.*;
+import mimimeow.task.Deadline;
+import mimimeow.task.Event;
+import mimimeow.task.Task;
+import mimimeow.task.TaskList;
+import mimimeow.task.Todo;
 import mimimeow.ui.MimiMeowUi;
 
 /** Executes parsed MimiMeow commands and updates the task list. */

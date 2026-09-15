@@ -14,7 +14,9 @@ public class TaskList {
     public void add(Task task) {
         tasks.add(task);
     }
-
+    public void delete(Task task) {
+        tasks.remove(task);
+    }
     /**
      * Returns the number of tasks currently stored.
      */
@@ -27,5 +29,12 @@ public class TaskList {
      */
     public Task get(int index) {
         return tasks.get(index);
+    }
+
+    /**
+     * Deletes and returns the task at the specified zero-based index.
+     */
+    public Task delete(int index) {
+        return tasks.remove(index);
     }
 }

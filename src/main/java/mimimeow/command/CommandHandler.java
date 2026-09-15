@@ -7,49 +7,58 @@ import mimimeow.task.TaskList;
 import mimimeow.task.Todo;
 import mimimeow.ui.MimiMeowUi;
 
-/** Executes parsed MimiMeow commands and updates the task list. */
+/**
+ * Executes parsed MimiMeow commands and updates the task list.
+ */
 public class CommandHandler {
     private final TaskList taskList;
     private final CommandParser commandParser;
     private final MimiMeowUi ui;
 
-    /** Creates a command handler with the supplied application components. */
+    /**
+     * Creates a command handler with the supplied application components.
+     */
     public CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui) {
         this.taskList = taskList;
         this.commandParser = commandParser;
         this.ui = ui;
     }
 
-    /** Executes a command and returns whether MimiMeow should exit. */
+    /**
+     * Executes a command and returns whether MimiMeow should exit.
+     */
     public boolean execute(String userInput) {
         ui.showSeparator();
         try {
             Command command = commandParser.parse(userInput);
             switch (command.getWord()) {
-            case "bye":
-                ui.showGoodbyeMessage();
-                ui.showSeparator();
-                return true;
-            case "list":
-                ui.showTaskList(taskList);
-                break;
-            case "mark":
-                updateTaskStatus(command.getArguments(), true);
-                break;
-            case "unmark":
-                updateTaskStatus(command.getArguments(), false);
-                break;
-            case "todo":
-                addTodo(command.getArguments());
-                break;
-            case "deadline":
-                addDeadline(command.getArguments());
-                break;
-            case "event":
-                addEvent(command.getArguments());
-                break;
-            default:
-                throw new MimiMeowException("Mimi does not recognise that command. Try todo, list, mark, or bye.");
+                case "bye":
+                    ui.showGoodbyeMessage();
+                    ui.showSeparator();
+                    return true;
+                case "list":
+                    ui.showTaskList(taskList);
+                    break;
+                case "mark":
+                    updateTaskStatus(command.getArguments(), true);
+                    break;
+                case "unmark":
+                    updateTaskStatus(command.getArguments(), false);
+                    break;
+                case "todo":
+                    addTodo(command.getArguments());
+                    break;
+                case "deadline":
+                    addDeadline(command.getArguments());
+                    break;
+                case "event":
+                    addEvent(command.getArguments());
+                    break;
+                case "delete":
+                    deleteTask(command.getArguments());
+                    break;
+                default:
+                    throw new MimiMeowException("Mimi does not recognise that command. Try todo, list, mark, or bye.");
             }
         } catch (MimiMeowException exception) {
             ui.showError(exception.getMessage());
@@ -69,12 +78,12 @@ public class CommandHandler {
     private void addDeadline(String commandArguments) {
         String[] deadlineParts = commandArguments.split("\\s*/by\\s+", 2);
         if (deadlineParts.length < 2) {
-            throw new MimiMeowException("Mimi needs a deadline description and date. Try: deadline description /by date.");
+            throw new MimiMeowException("Mimi's calendar is puzzled. Try: deadline description /by date.");
         }
         String description = deadlineParts[0].trim();
         String deadlineDate = deadlineParts[1].trim();
         if (description.isEmpty() || deadlineDate.isEmpty()) {
-            throw new MimiMeowException("A deadline needs both a description and a date, meow.");
+            throw new MimiMeowException("A deadline needs both a description and a date, meow has told you 10000 times.");
         }
         addTaskAndReply(new Deadline(description, deadlineDate));
     }
@@ -87,7 +96,7 @@ public class CommandHandler {
         String description = eventParts[0].trim();
         String[] timeParts = eventParts[1].split("\\s*/to\\s+", 2);
         if (timeParts.length < 2) {
-            throw new MimiMeowException("Mimi needs both /from and /to times for this event.");
+            throw new MimiMeowException("Mimi needs both /from and /to times before I can pounce on this event.");
         }
         String startTime = timeParts[0].trim();
         String endTime = timeParts[1].trim();
@@ -110,7 +119,7 @@ public class CommandHandler {
         try {
             taskNumber = Integer.parseInt(taskNumberText);
         } catch (NumberFormatException exception) {
-            throw new MimiMeowException("The task number must be a positive whole number.");
+            throw new MimiMeowException("Mimi can only chase a positive whole-number task index.");
         }
         if (taskNumber < 1 || taskNumber > taskList.size()) {
             throw new MimiMeowException("Mimi cannot find task " + taskNumber + ". Check the task number");
@@ -122,5 +131,22 @@ public class CommandHandler {
             task.setAsNotDone();
         }
         ui.showTaskStatus(task, isDone);
+    }
+
+    private void deleteTask(String taskNumberText) {
+        if (taskNumberText.isEmpty()) {
+            throw new MimiMeowException("Mimi needs a task number, meow.");
+        }
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(taskNumberText);
+        } catch (NumberFormatException exception) {
+            throw new MimiMeowException("Mimi can only chase a positive whole-number task index.");
+        }
+        if (taskNumber < 1 || taskNumber > taskList.size()) {
+            throw new MimiMeowException("Mimi cannot find task " + taskNumber + ". Check the task number");
+        }
+        Task deletedTask = taskList.delete(taskNumber - 1);
+        ui.showTaskDeleted(deletedTask, taskList.size());
     }
 }

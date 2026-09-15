@@ -66,6 +66,14 @@ public class MimiMeowUi {
         printWithIndent(task.toString());
     }
 
+    /** Prints the response after deleting a task. */
+    public void showTaskDeleted(Task task, int taskCount) {
+        printWithIndent("Noted! Meow've removed this task:");
+        printWithIndent(task.toString());
+        printWithIndent("Now you have " + taskCount
+                + (taskCount == 1 ? " task in the list." : " tasks in the list."));
+    }
+
     private void printWithIndent(String message) {
         System.out.println("    " + message);
     }

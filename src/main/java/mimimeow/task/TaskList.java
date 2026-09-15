@@ -1,28 +1,31 @@
 package mimimeow.task;
 
-/** Stores and manages the tasks created in MimiMeow. */
+import java.util.ArrayList;
+
+/**
+ * Stores and manages the tasks created in MimiMeow.
+ */
 public class TaskList {
-    private static final int MAXIMUM_TASKS = 100;
-    private final Task[] tasks = new Task[MAXIMUM_TASKS];
-    private int taskCount;
+    private final ArrayList<Task> tasks = new ArrayList<>();
 
-    /** Adds a task when storage is available. */
+    /**
+     * Adds a task to the dynamic array
+     */
     public void add(Task task) {
-        if (taskCount < tasks.length) {
-            tasks[taskCount] = task;
-            taskCount++;
-        } else {
-            System.out.println("Storage is full.");
-        }
+        tasks.add(task);
     }
 
-    /** Returns the number of tasks currently stored. */
+    /**
+     * Returns the number of tasks currently stored.
+     */
     public int size() {
-        return taskCount;
+        return tasks.size();
     }
 
-    /** Returns the task at the specified zero-based index. */
+    /**
+     * Returns the task at the specified zero-based index.
+     */
     public Task get(int index) {
-        return tasks[index];
+        return tasks.get(index);
     }
 }

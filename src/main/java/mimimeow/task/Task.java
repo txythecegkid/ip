@@ -16,6 +16,21 @@ public abstract class Task {
         return (isDone ? "X" : " ");
     }
 
+    /** Returns whether this task is marked as done. */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /** Returns this task's common fields in the format used for storage. */
+    public String toFileString() {
+        return (isDone ? "1" : "0") + " | " + escapeFileField(description);
+    }
+
+    /** Escapes characters that otherwise have special meaning in the storage format. */
+    protected String escapeFileField(String field) {
+        return field.replace("\\", "\\\\").replace("|", "\\|");
+    }
+
     /** Returns this task in the format used when displaying the task list. */
     @Override
     public String toString() {

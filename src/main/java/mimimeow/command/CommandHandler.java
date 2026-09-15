@@ -1,5 +1,6 @@
 package mimimeow.command;
 
+import mimimeow.storage.Storage;
 import mimimeow.task.Deadline;
 import mimimeow.task.Event;
 import mimimeow.task.Task;
@@ -14,14 +15,14 @@ public class CommandHandler {
     private final TaskList taskList;
     private final CommandParser commandParser;
     private final MimiMeowUi ui;
+    private final Storage storage;
 
-    /**
-     * Creates a command handler with the supplied application components.
-     */
-    public CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui) {
+    /** Creates a command handler with the supplied application components. */
+    public CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui, Storage storage) {
         this.taskList = taskList;
         this.commandParser = commandParser;
         this.ui = ui;
+        this.storage = storage;
     }
 
     /**
@@ -91,7 +92,8 @@ public class CommandHandler {
     private void addEvent(String commandArguments) {
         String[] eventParts = commandArguments.split("\\s*/from\\s+", 2);
         if (eventParts.length < 2) {
-            throw new MimiMeowException("Mimi needs an event description, start, and end. Try: event description /from start /to end.");
+            throw new MimiMeowException(
+                    "Mimi needs an event description, start, and end. Try: event description /from start /to end.");
         }
         String description = eventParts[0].trim();
         String[] timeParts = eventParts[1].split("\\s*/to\\s+", 2);
@@ -108,6 +110,12 @@ public class CommandHandler {
 
     private void addTaskAndReply(Task task) {
         taskList.add(task);
+        try {
+            storage.save(taskList);
+        } catch (MimiMeowException exception) {
+            taskList.delete(taskList.size() - 1);
+            throw exception;
+        }
         ui.showTaskAdded(task, taskList.size());
     }
 
@@ -125,10 +133,21 @@ public class CommandHandler {
             throw new MimiMeowException("Mimi cannot find task " + taskNumber + ". Check the task number");
         }
         Task task = taskList.get(taskNumber - 1);
+        boolean wasDone = task.isDone();
         if (isDone) {
             task.setAsDone();
         } else {
             task.setAsNotDone();
+        }
+        try {
+            storage.save(taskList);
+        } catch (MimiMeowException exception) {
+            if (wasDone) {
+                task.setAsDone();
+            } else {
+                task.setAsNotDone();
+            }
+            throw exception;
         }
         ui.showTaskStatus(task, isDone);
     }

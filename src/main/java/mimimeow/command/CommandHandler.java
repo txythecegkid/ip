@@ -69,12 +69,12 @@ public class CommandHandler {
     private void addDeadline(String commandArguments) {
         String[] deadlineParts = commandArguments.split("\\s*/by\\s+", 2);
         if (deadlineParts.length < 2) {
-            throw new MimiMeowException("Mimi needs a deadline description and date. Try: deadline description /by date.");
+            throw new MimiMeowException("Mimi's calendar is puzzled. Try: deadline description /by date.");
         }
         String description = deadlineParts[0].trim();
         String deadlineDate = deadlineParts[1].trim();
         if (description.isEmpty() || deadlineDate.isEmpty()) {
-            throw new MimiMeowException("A deadline needs both a description and a date, meow.");
+            throw new MimiMeowException("A deadline needs both a description and a date, meow has told you 10000 times.");
         }
         addTaskAndReply(new Deadline(description, deadlineDate));
     }
@@ -87,7 +87,7 @@ public class CommandHandler {
         String description = eventParts[0].trim();
         String[] timeParts = eventParts[1].split("\\s*/to\\s+", 2);
         if (timeParts.length < 2) {
-            throw new MimiMeowException("Mimi needs both /from and /to times for this event.");
+            throw new MimiMeowException("Mimi needs both /from and /to times before I can pounce on this event.");
         }
         String startTime = timeParts[0].trim();
         String endTime = timeParts[1].trim();
@@ -110,7 +110,7 @@ public class CommandHandler {
         try {
             taskNumber = Integer.parseInt(taskNumberText);
         } catch (NumberFormatException exception) {
-            throw new MimiMeowException("The task number must be a positive whole number.");
+            throw new MimiMeowException("Mimi can only chase a positive whole-number task index.");
         }
         if (taskNumber < 1 || taskNumber > taskList.size()) {
             throw new MimiMeowException("Mimi cannot find task " + taskNumber + ". Check the task number");

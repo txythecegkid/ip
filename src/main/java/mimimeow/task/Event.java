@@ -19,6 +19,12 @@ public class Event extends Task {
     }
 
     @Override
+    public String toFileString() {
+        return "E | " + super.toFileString() + " | "
+                + escapeFileField(startTime) + " | " + escapeFileField(endTime);
+    }
+
+    @Override
     public String toString() {
         return "[E]" + super.toString()
                 + " (from: " + startTime + " to: " + endTime + ")";

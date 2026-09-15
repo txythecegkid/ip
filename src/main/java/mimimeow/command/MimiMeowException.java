@@ -6,4 +6,9 @@ public class MimiMeowException extends RuntimeException {
     public MimiMeowException(String message) {
         super(message);
     }
+
+    /** Creates an exception with a user-facing message and its underlying cause. */
+    public MimiMeowException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

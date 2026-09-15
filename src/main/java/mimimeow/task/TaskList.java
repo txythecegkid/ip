@@ -28,4 +28,11 @@ public class TaskList {
     public Task get(int index) {
         return tasks.get(index);
     }
+
+    /**
+     * Deletes and returns the task at the specified zero-based index.
+     */
+    public Task delete(int index) {
+        return tasks.remove(index);
+    }
 }

@@ -99,7 +99,47 @@ This file records the command-line UI test cases for the project. Run the cases 
       ────────────────────────────────────────────────────────────
   ```
 
-### TC-003: Reject corrupted saved data safely
+### TC-003: Delete a task from saved data
+
+- **Aim:** Verify that deleting a task removes it from both the in-memory list and the saved data file.
+- **Precondition:** Run TC-001 and TC-002 first, leaving their generated `data/mimimeow.txt` unchanged.
+- **Allowed differences:** Platform-specific line endings and trailing whitespace in the decorative banner or blank output lines may be ignored.
+- **Inputs:**
+  ```text
+  delete 2
+  bye
+  ```
+- **Expected console output:**
+  ```text
+        ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
+   ███╗   ███╗██╗███╗   ███╗██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
+   ████╗ ████║██║████╗ ████║██║████╗ ████║██╔════╝██╔═══██╗██║    ██║
+   ██╔████╔██║██║██╔████╔██║██║██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║
+   ██║╚██╔╝██║██║██║╚██╔╝██║██║██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║
+   ██║ ╚═╝ ██║██║██║ ╚═╝ ██║██║██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝
+   ╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝
+        ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
+
+      Hello! I'm MimiMeow.
+      What can I do for you?
+      ────────────────────────────────────────────────────────────
+
+      ────────────────────────────────────────────────────────────
+      Noted! Meow've removed this task:
+      [D][ ] return book (by: June 6th)
+      Now you have 2 tasks in the list.
+      ────────────────────────────────────────────────────────────
+      ────────────────────────────────────────────────────────────
+      Bye. Hope to see you again soon!
+      ────────────────────────────────────────────────────────────
+  ```
+- **Expected `data/mimimeow.txt` contents:**
+  ```text
+  T | 1 | compare A \| B \\ C
+  E | 0 | project meeting | Aug 6th 2pm | Aug 6th 4pm
+  ```
+
+### TC-004: Reject corrupted saved data safely
 
 - **Aim:** Verify that malformed saved data produces a clear error with its line number and does not partially load tasks.
 - **Precondition:** Copy `test/fixtures/corrupted-tasks.txt` to `data/mimimeow.txt`.

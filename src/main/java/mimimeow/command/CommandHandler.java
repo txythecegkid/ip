@@ -84,7 +84,8 @@ public class CommandHandler {
         String description = deadlineParts[0].trim();
         String deadlineDate = deadlineParts[1].trim();
         if (description.isEmpty() || deadlineDate.isEmpty()) {
-            throw new MimiMeowException("A deadline needs both a description and a date, meow has told you 10000 times.");
+            throw new MimiMeowException(
+                    "A deadline needs both a description and a date, meow has told you 10000 times.");
         }
         addTaskAndReply(new Deadline(description, deadlineDate));
     }
@@ -165,7 +166,14 @@ public class CommandHandler {
         if (taskNumber < 1 || taskNumber > taskList.size()) {
             throw new MimiMeowException("Mimi cannot find task " + taskNumber + ". Check the task number");
         }
-        Task deletedTask = taskList.delete(taskNumber - 1);
+        int taskIndex = taskNumber - 1;
+        Task deletedTask = taskList.delete(taskIndex);
+        try {
+            storage.save(taskList);
+        } catch (MimiMeowException exception) {
+            taskList.add(taskIndex, deletedTask);
+            throw exception;
+        }
         ui.showTaskDeleted(deletedTask, taskList.size());
     }
 }

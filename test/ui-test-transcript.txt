@@ -3,7 +3,7 @@ UI TEST TRANSCRIPT
 
 Java version: 25.0.4.1
 Test cases: TC-001 Save added and updated tasks; TC-002 Load saved tasks after restart;
-TC-003 Reject corrupted saved data safely
+TC-003 Delete a task from saved data; TC-004 Reject corrupted saved data safely
 Result: PASS
 Trailing whitespace is omitted from this transcript as permitted by the test plan.
 
@@ -91,11 +91,45 @@ TC-002 OBSERVED CONSOLE OUTPUT
 
 TC-003 INPUT
 ------------
+delete 2
+bye
+
+TC-003 OBSERVED CONSOLE OUTPUT
+------------------------------
+      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
+ ███╗   ███╗██╗███╗   ███╗██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
+ ████╗ ████║██║████╗ ████║██║████╗ ████║██╔════╝██╔═══██╗██║    ██║
+ ██╔████╔██║██║██╔████╔██║██║██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║
+ ██║╚██╔╝██║██║██║╚██╔╝██║██║██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║
+ ██║ ╚═╝ ██║██║██║ ╚═╝ ██║██║██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝
+ ╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝
+      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
+
+    Hello! I'm MimiMeow.
+    What can I do for you?
+    ────────────────────────────────────────────────────────────
+
+    ────────────────────────────────────────────────────────────
+    Noted! Meow've removed this task:
+    [D][ ] return book (by: June 6th)
+    Now you have 2 tasks in the list.
+    ────────────────────────────────────────────────────────────
+    ────────────────────────────────────────────────────────────
+    Bye. Hope to see you again soon!
+    ────────────────────────────────────────────────────────────
+
+TC-003 OBSERVED DATA/MIMIMEOW.TXT
+---------------------------------
+T | 1 | compare A \| B \\ C
+E | 0 | project meeting | Aug 6th 2pm | Aug 6th 4pm
+
+TC-004 INPUT
+------------
 todo do not overwrite
 list
 bye
 
-TC-003 OBSERVED CONSOLE OUTPUT
+TC-004 OBSERVED CONSOLE OUTPUT
 ------------------------------
       ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
  ███╗   ███╗██╗███╗   ███╗██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
@@ -122,7 +156,7 @@ TC-003 OBSERVED CONSOLE OUTPUT
     Bye. Hope to see you again soon!
     ────────────────────────────────────────────────────────────
 
-TC-003 DATA FILE REMAINED UNCHANGED
+TC-004 DATA FILE REMAINED UNCHANGED
 -----------------------------------
 T | 0 | valid task
 

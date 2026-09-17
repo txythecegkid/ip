@@ -9,14 +9,26 @@ public class TaskList {
     private final ArrayList<Task> tasks = new ArrayList<>();
 
     /**
-     * Adds a task to the dynamic array
+     * Adds a task to the dynamic list.
      */
     public void add(Task task) {
         tasks.add(task);
     }
+
+    /**
+     * Adds a task at the specified zero-based index.
+     */
+    public void add(int index, Task task) {
+        tasks.add(index, task);
+    }
+
+    /**
+     * Deletes the specified task from the list if it is present.
+     */
     public void delete(Task task) {
         tasks.remove(task);
     }
+
     /**
      * Returns the number of tasks currently stored.
      */

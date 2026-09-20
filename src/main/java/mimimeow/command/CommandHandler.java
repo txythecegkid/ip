@@ -78,6 +78,9 @@ public class CommandHandler {
             case "overdue":
                 showOverdueTasks();
                 break;
+            case "find":
+                findTasks(command.getArguments());
+                break;
             case "mark":
                 updateTaskStatus(command.getArguments(), true);
                 break;
@@ -98,7 +101,7 @@ public class CommandHandler {
                 break;
             default:
                 throw new CommandException("Mimi does not recognise that command. Try list, today, upcoming, "
-                        + "overdue, todo, deadline, event, mark, unmark, delete, or bye.");
+                        + "overdue, find, todo, deadline, event, mark, unmark, delete, or bye.");
             }
         } catch (MimiMeowException exception) {
             ui.showError(exception.getMessage());
@@ -138,6 +141,15 @@ public class CommandHandler {
     }
 
     /** Parses, creates, and saves a deadline from the supplied command arguments. */
+
+    private void findTasks(String keyword) {
+        if (keyword.isBlank()) {
+            throw new CommandException("Mimi needs a keyword to find tasks.");
+        }
+        ui.showMatchingTasks(taskList.findTasks(keyword));
+    }
+
+
     private void addDeadline(String commandArguments) {
         String[] deadlineParts = commandArguments.split("\\s*/by\\s+", 2);
         if (deadlineParts.length < 2) {

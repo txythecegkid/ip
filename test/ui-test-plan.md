@@ -199,6 +199,7 @@ This file records the command-line UI test cases for the project. Run the cases 
   overdue
   bye
   ```
+
 - **Expected console output:**
   ```text
         ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
@@ -225,6 +226,49 @@ This file records the command-line UI test cases for the project. Run the cases 
       ────────────────────────────────────────────────────────────
       Here are your overdue deadlines:
       - [D][ ] old deadline (by: 1 Jan 2000, 9:00 AM)
+      ────────────────────────────────────────────────────────────
+      ────────────────────────────────────────────────────────────
+      Bye. Hope to see you again soon!
+      ────────────────────────────────────────────────────────────
+  ```
+
+### TC-006: Find tasks by description
+
+- **Aim:** Verify that finding tasks is case-insensitive, searches descriptions only, and validates the keyword.
+- **Precondition:** Copy `test/fixtures/scheduled-tasks.txt` to `data/mimimeow.txt`.
+- **Allowed differences:** Platform-specific line endings and trailing whitespace in the decorative banner or blank output lines may be ignored.
+- **Inputs:**
+  ```text
+  find FUTURE
+  find 9999
+  find
+  bye
+  ```
+- **Expected console output:**
+  ```text
+        ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
+   ███╗   ███╗██╗███╗   ███╗██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
+   ████╗ ████║██║████╗ ████║██║████╗ ████║██╔════╝██╔═══██╗██║    ██║
+   ██╔████╔██║██║██╔████╔██║██║██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║
+   ██║╚██╔╝██║██║██║╚██╔╝██║██║██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║
+   ██║ ╚═╝ ██║██║██║ ╚═╝ ██║██║██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝
+   ╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚═╝╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝
+        ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )
+
+      Hello! I'm MimiMeow.
+      What can I do for you?
+      ────────────────────────────────────────────────────────────
+
+      ────────────────────────────────────────────────────────────
+      Here are the matching tasks in your list:
+      1. [D][ ] future deadline (by: 1 Jan 9999, 9:00 AM)
+      2. [E][ ] future event (from: 2 Jan 9999, 10:00 AM to: 2 Jan 9999, 11:00 AM)
+      ────────────────────────────────────────────────────────────
+      ────────────────────────────────────────────────────────────
+      There are no matching tasks in your list.
+      ────────────────────────────────────────────────────────────
+      ────────────────────────────────────────────────────────────
+      Miiiision impossible! Mimi needs a keyword to find tasks.
       ────────────────────────────────────────────────────────────
       ────────────────────────────────────────────────────────────
       Bye. Hope to see you again soon!

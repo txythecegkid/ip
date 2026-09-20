@@ -99,12 +99,26 @@ public class MimiMeowUi {
         }
     }
 
+
     /**
      * Prints the response after changing a task's completion status.
      *
      * @param task updated task
      * @param isDone new completion status
      */
+    /** Prints tasks whose descriptions match a search keyword. */
+    public void showMatchingTasks(List<Task> tasks) {
+        if (tasks.isEmpty()) {
+            printWithIndent("There are no matching tasks in your list.");
+            return;
+        }
+        printWithIndent("Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            printWithIndent((i + 1) + ". " + tasks.get(i));
+        }
+    }
+
+    /** Prints the response after changing a task's completion status. */
     public void showTaskStatus(Task task, boolean isDone) {
         printWithIndent(isDone
                 ? "Nice! Meow've marked this task as done:"

@@ -73,12 +73,25 @@ public class TaskList {
         return tasks.remove(index);
     }
 
+
     /**
      * Returns scheduled tasks that occur on the specified date.
      *
      * @param date date to query
      * @return matching tasks in chronological order
      */
+    /** Returns tasks whose descriptions contain the specified keyword. */
+    public List<Task> findTasks(String keyword) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.hasDescriptionContaining(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return matchingTasks;
+    }
+
+    /** Returns scheduled tasks that occur on the specified date. */
     public List<Task> findTasksOccurringOn(LocalDate date) {
         ArrayList<Task> matchingTasks = new ArrayList<>();
         for (Task task : tasks) {

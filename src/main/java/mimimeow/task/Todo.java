@@ -12,11 +12,13 @@ public class Todo extends Task {
         super(description);
     }
 
+    /** Returns this todo in the storage format. */
     @Override
     public String toFileString() {
         return "T | " + super.toFileString();
     }
 
+    /** Returns this todo in the user-facing display format. */
     @Override
     public String toString() {
         return "[T]" + super.toString();

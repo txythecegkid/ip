@@ -21,31 +21,37 @@ public class Deadline extends Task implements ScheduledTask {
         this.by = new TaskDateTime(by);
     }
 
+    /** Returns this deadline in the storage format. */
     @Override
     public String toFileString() {
         return "D | " + super.toFileString() + " | " + escapeFileField(by.toFileString());
     }
 
+    /** Returns whether this deadline falls on the specified date. */
     @Override
     public boolean occursOn(LocalDate date) {
         return by.isOn(date);
     }
 
+    /** Returns whether this deadline is due at or after the specified date and time. */
     @Override
     public boolean isUpcomingAt(LocalDateTime dateTime) {
         return !by.isBefore(dateTime);
     }
 
+    /** Returns whether this deadline was due before the specified date and time. */
     @Override
     public boolean isOverdueAt(LocalDateTime dateTime) {
         return by.isBefore(dateTime);
     }
 
+    /** Returns the deadline date and time used for chronological ordering. */
     @Override
     public TaskDateTime getScheduleTime() {
         return by;
     }
 
+    /** Returns this deadline in the user-facing display format. */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by + ")";

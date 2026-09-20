@@ -32,7 +32,11 @@ public class MimiMeow {
         this.commandHandler = new CommandHandler(taskList, new CommandParser(), ui, storage);
     }
 
-    /** Starts the MimiMeow command-line application. */
+    /**
+     * Starts the MimiMeow command-line application.
+     *
+     * @param args command-line arguments, which are not used
+     */
     public static void main(String[] args) {
         new MimiMeow().run();
     }

@@ -8,7 +8,16 @@ import mimimeow.task.TaskList;
 
 /** Handles input and output for the MimiMeow command-line interface. */
 public class MimiMeowUi {
-    /** Reads and trims one line of user input. */
+    /** Creates a MimiMeow user interface. */
+    public MimiMeowUi() {
+    }
+
+    /**
+     * Reads and trims one line of user input.
+     *
+     * @param inputScanner scanner connected to user input
+     * @return trimmed input line
+     */
     public String readUserInput(Scanner inputScanner) {
         return inputScanner.nextLine().trim();
     }
@@ -32,12 +41,21 @@ public class MimiMeowUi {
         printWithIndent("Bye. Hope to see you again soon!");
     }
 
-    /** Prints a user-facing error message in MimiMeow's voice. */
+    /**
+     * Prints a user-facing error message in MimiMeow's voice.
+     *
+     * @param message error message to print
+     */
     public void showError(String message) {
         printWithIndent("Miiiision impossible! " + message);
     }
 
-    /** Prints the response after adding a task. */
+    /**
+     * Prints the response after adding a task.
+     *
+     * @param task added task
+     * @param taskCount number of tasks after the addition
+     */
     public void showTaskAdded(Task task, int taskCount) {
         printWithIndent("(^._.^) meows: Got it! Meow'hv added this task:");
         printWithIndent(task.toString());
@@ -45,7 +63,11 @@ public class MimiMeowUi {
                 + (taskCount == 1 ? " task in the list." : " tasks in the list."));
     }
 
-    /** Prints all tasks currently stored in MimiMeow's task list. */
+    /**
+     * Prints all tasks currently stored in MimiMeow's task list.
+     *
+     * @param taskList task list to print
+     */
     public void showTaskList(TaskList taskList) {
         if (taskList.size() > 1) {
             printWithIndent("Here are the tasks in your list:");
@@ -59,7 +81,13 @@ public class MimiMeowUi {
         }
     }
 
-    /** Prints tasks returned by a date-based command. */
+    /**
+     * Prints tasks returned by a date-based command.
+     *
+     * @param tasks tasks to print
+     * @param heading heading shown when tasks are present
+     * @param emptyMessage message shown when no tasks are present
+     */
     public void showScheduledTasks(List<Task> tasks, String heading, String emptyMessage) {
         if (tasks.isEmpty()) {
             printWithIndent(emptyMessage);
@@ -71,7 +99,12 @@ public class MimiMeowUi {
         }
     }
 
-    /** Prints the response after changing a task's completion status. */
+    /**
+     * Prints the response after changing a task's completion status.
+     *
+     * @param task updated task
+     * @param isDone new completion status
+     */
     public void showTaskStatus(Task task, boolean isDone) {
         printWithIndent(isDone
                 ? "Nice! Meow've marked this task as done:"
@@ -79,7 +112,12 @@ public class MimiMeowUi {
         printWithIndent(task.toString());
     }
 
-    /** Prints the response after deleting a task. */
+    /**
+     * Prints the response after deleting a task.
+     *
+     * @param task deleted task
+     * @param taskCount number of tasks after deletion
+     */
     public void showTaskDeleted(Task task, int taskCount) {
         printWithIndent("Noted! Meow've removed this task:");
         printWithIndent(task.toString());
@@ -87,10 +125,12 @@ public class MimiMeowUi {
                 + (taskCount == 1 ? " task in the list." : " tasks in the list."));
     }
 
+    /** Prints one line with the standard indentation used by MimiMeow. */
     private void printWithIndent(String message) {
         System.out.println("    " + message);
     }
 
+    /** Creates the decorative banner displayed when MimiMeow starts. */
     private String createBanner() {
         return
                   "      ( o.o ) | | (^._.^) | | (｡♥‿♥｡) | | (^._.^) | | ( o.o )      \n"

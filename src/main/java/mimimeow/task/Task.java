@@ -5,7 +5,11 @@ public abstract class Task {
     private final String description;
     private boolean isDone;
 
-    /** Creates a task with the specified non-blank description. */
+    /**
+     * Creates a task with the specified non-blank description.
+     *
+     * @param description task description
+     */
     protected Task(String description) {
         if (description == null || description.isBlank()) {
             throw new InvalidTaskException("A task needs a description.");
@@ -14,22 +18,39 @@ public abstract class Task {
         this.isDone = false;
     }
 
-    /** Returns the completion status icon for this task. */
+    /**
+     * Returns the completion status icon for this task.
+     *
+     * @return completion status icon
+     */
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
 
-    /** Returns whether this task is marked as done. */
+    /**
+     * Returns whether this task is marked as done.
+     *
+     * @return true if the task is complete
+     */
     public boolean isDone() {
         return isDone;
     }
 
-    /** Returns this task's common fields in the format used for storage. */
+    /**
+     * Returns this task's common fields in the format used for storage.
+     *
+     * @return serialized common task fields
+     */
     public String toFileString() {
         return (isDone ? "1" : "0") + " | " + escapeFileField(description);
     }
 
-    /** Escapes characters that otherwise have special meaning in the storage format. */
+    /**
+     * Escapes characters that otherwise have special meaning in the storage format.
+     *
+     * @param field field to escape
+     * @return escaped field
+     */
     protected String escapeFileField(String field) {
         return field.replace("\\", "\\\\").replace("|", "\\|");
     }

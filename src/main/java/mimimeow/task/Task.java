@@ -1,5 +1,7 @@
 package mimimeow.task;
 
+import java.util.Locale;
+
 /** Represents a task in MimiMeow's task list. */
 public abstract class Task {
     private final String description;
@@ -22,6 +24,14 @@ public abstract class Task {
     /** Returns whether this task is marked as done. */
     public boolean isDone() {
         return isDone;
+    }
+
+    /** Returns whether the description contains the specified keyword, ignoring letter case. */
+    public boolean hasDescriptionContaining(String keyword) {
+        if (keyword == null || keyword.isBlank()) {
+            return false;
+        }
+        return description.toLowerCase(Locale.ROOT).contains(keyword.trim().toLowerCase(Locale.ROOT));
     }
 
     /** Returns this task's common fields in the format used for storage. */

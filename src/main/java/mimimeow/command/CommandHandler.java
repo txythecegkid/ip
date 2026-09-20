@@ -1,5 +1,9 @@
 package mimimeow.command;
 
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import mimimeow.exception.MimiMeowException;
 import mimimeow.storage.Storage;
 import mimimeow.storage.StorageException;
@@ -16,13 +20,19 @@ public class CommandHandler {
     private final CommandParser commandParser;
     private final MimiMeowUi ui;
     private final Storage storage;
+    private final Clock clock;
 
     /** Creates a command handler with the supplied application components. */
     public CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui, Storage storage) {
+        this(taskList, commandParser, ui, storage, Clock.systemDefaultZone());
+    }
+
+    CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui, Storage storage, Clock clock) {
         this.taskList = taskList;
         this.commandParser = commandParser;
         this.ui = ui;
         this.storage = storage;
+        this.clock = clock;
     }
 
     /** Executes a command and returns whether MimiMeow should exit. */
@@ -37,6 +47,15 @@ public class CommandHandler {
                 return true;
             case "list":
                 ui.showTaskList(taskList);
+                break;
+            case "today":
+                showTodayTasks();
+                break;
+            case "upcoming":
+                showUpcomingTasks();
+                break;
+            case "overdue":
+                showOverdueTasks();
                 break;
             case "mark":
                 updateTaskStatus(command.getArguments(), true);
@@ -57,7 +76,8 @@ public class CommandHandler {
                 deleteTask(command.getArguments());
                 break;
             default:
-                throw new CommandException("Mimi does not recognise that command. Try todo, list, mark, or bye.");
+                throw new CommandException("Mimi does not recognise that command. Try list, today, upcoming, "
+                        + "overdue, todo, deadline, event, mark, unmark, delete, or bye.");
             }
         } catch (MimiMeowException exception) {
             ui.showError(exception.getMessage());
@@ -69,6 +89,27 @@ public class CommandHandler {
     private void addTodo(String commandArguments) {
         String description = commandArguments.trim();
         addTaskAndReply(new Todo(description));
+    }
+
+    private void showTodayTasks() {
+        ui.showScheduledTasks(
+                taskList.findTasksOccurringOn(LocalDate.now(clock)),
+                "Here are the tasks scheduled for today:",
+                "There are no tasks scheduled for today.");
+    }
+
+    private void showUpcomingTasks() {
+        ui.showScheduledTasks(
+                taskList.findUpcomingTasks(LocalDateTime.now(clock)),
+                "Here are your upcoming tasks:",
+                "There are no upcoming tasks.");
+    }
+
+    private void showOverdueTasks() {
+        ui.showScheduledTasks(
+                taskList.findOverdueTasks(LocalDateTime.now(clock)),
+                "Here are your overdue deadlines:",
+                "There are no overdue deadlines.");
     }
 
     private void addDeadline(String commandArguments) {

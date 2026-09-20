@@ -1,9 +1,10 @@
 package mimimeow.ui;
 
+import java.util.List;
+import java.util.Scanner;
+
 import mimimeow.task.Task;
 import mimimeow.task.TaskList;
-
-import java.util.Scanner;
 
 /** Handles input and output for the MimiMeow command-line interface. */
 public class MimiMeowUi {
@@ -55,6 +56,18 @@ public class MimiMeowUi {
         }
         for (int i = 0; i < taskList.size(); i++) {
             printWithIndent((i + 1) + ". " + taskList.get(i));
+        }
+    }
+
+    /** Prints tasks returned by a date-based command. */
+    public void showScheduledTasks(List<Task> tasks, String heading, String emptyMessage) {
+        if (tasks.isEmpty()) {
+            printWithIndent(emptyMessage);
+            return;
+        }
+        printWithIndent(heading);
+        for (Task task : tasks) {
+            printWithIndent("- " + task);
         }
     }
 

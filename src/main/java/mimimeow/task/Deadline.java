@@ -1,9 +1,11 @@
 package mimimeow.task;
 
-/** Represents a task that must be completed by a specified deadline. */
-public class Deadline extends Task {
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-    private final String by;
+/** Represents a task that must be completed by a specified deadline. */
+public class Deadline extends Task implements ScheduledTask {
+    private final TaskDateTime by;
 
     /**
      * Creates a deadline task with the specified description and deadline.
@@ -16,12 +18,32 @@ public class Deadline extends Task {
         if (by == null || by.isBlank()) {
             throw new InvalidTaskException("A deadline needs a date.");
         }
-        this.by = by.trim();
+        this.by = new TaskDateTime(by);
     }
 
     @Override
     public String toFileString() {
-        return "D | " + super.toFileString() + " | " + escapeFileField(by);
+        return "D | " + super.toFileString() + " | " + escapeFileField(by.toFileString());
+    }
+
+    @Override
+    public boolean occursOn(LocalDate date) {
+        return by.isOn(date);
+    }
+
+    @Override
+    public boolean isUpcomingAt(LocalDateTime dateTime) {
+        return !by.isBefore(dateTime);
+    }
+
+    @Override
+    public boolean isOverdueAt(LocalDateTime dateTime) {
+        return by.isBefore(dateTime);
+    }
+
+    @Override
+    public TaskDateTime getScheduleTime() {
+        return by;
     }
 
     @Override

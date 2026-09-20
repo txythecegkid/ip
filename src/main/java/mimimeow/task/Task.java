@@ -5,9 +5,12 @@ public abstract class Task {
     private final String description;
     private boolean isDone;
 
-    /** Creates a task with the specified description. */
-    public Task(String description) {
-        this.description = description;
+    /** Creates a task with the specified non-blank description. */
+    protected Task(String description) {
+        if (description == null || description.isBlank()) {
+            throw new InvalidTaskException("A task needs a description.");
+        }
+        this.description = description.trim();
         this.isDone = false;
     }
 

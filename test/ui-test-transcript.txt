@@ -9,6 +9,7 @@ Trailing whitespace is omitted from this transcript as permitted by the test pla
 
 INPUT
 -----
+todo
 todo compare A | B \ C
 deadline return book /by June 6th
 event project meeting /from Aug 6th 2pm /to Aug 6th 4pm
@@ -30,6 +31,9 @@ OBSERVED CONSOLE OUTPUT
     What can I do for you?
     ────────────────────────────────────────────────────────────
 
+    ────────────────────────────────────────────────────────────
+    Miiiision impossible! A task needs a description.
+    ────────────────────────────────────────────────────────────
     ────────────────────────────────────────────────────────────
     (^._.^) meows: Got it! Meow'hv added this task:
     [T][ ] compare A | B \ C

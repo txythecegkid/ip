@@ -2,8 +2,8 @@ package mimimeow.task;
 
 /** Represents a task that takes place during a specified time period. */
 public class Event extends Task {
-    private String startTime;
-    private String endTime;
+    private final String startTime;
+    private final String endTime;
 
     /**
      * Creates an event with the specified description, start time, and end time.
@@ -14,8 +14,11 @@ public class Event extends Task {
      */
     public Event(String description, String startTime, String endTime) {
         super(description);
-        this.startTime = startTime;
-        this.endTime = endTime;
+        if (startTime == null || startTime.isBlank() || endTime == null || endTime.isBlank()) {
+            throw new InvalidTaskException("An event needs both start and end times.");
+        }
+        this.startTime = startTime.trim();
+        this.endTime = endTime.trim();
     }
 
     @Override

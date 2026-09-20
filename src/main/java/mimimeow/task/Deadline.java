@@ -13,7 +13,10 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) {
         super(description);
-        this.by = by;
+        if (by == null || by.isBlank()) {
+            throw new InvalidTaskException("A deadline needs a date.");
+        }
+        this.by = by.trim();
     }
 
     @Override

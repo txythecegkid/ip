@@ -9,9 +9,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import mimimeow.command.MimiMeowException;
 import mimimeow.task.Deadline;
 import mimimeow.task.Event;
+import mimimeow.task.InvalidTaskException;
 import mimimeow.task.Task;
 import mimimeow.task.TaskList;
 import mimimeow.task.Todo;
@@ -38,23 +38,27 @@ public class Storage {
             for (int i = 0; i < taskLines.size(); i++) {
                 String taskLine = taskLines.get(i);
                 if (!taskLine.isBlank()) {
-                    taskList.add(parseTask(taskLine, i + 1));
+                    try {
+                        taskList.add(parseTask(taskLine, i + 1));
+                    } catch (InvalidTaskException exception) {
+                        throw createCorruptedDataException(i + 1, exception.getMessage());
+                    }
                 }
             }
             return taskList;
-        } catch (MimiMeowException exception) {
+        } catch (DataFormatException exception) {
             canSave = false;
             throw exception;
         } catch (IOException | SecurityException exception) {
             canSave = false;
-            throw new MimiMeowException("Mimi could not read the saved tasks.", exception);
+            throw new StorageException("Mimi could not read the saved tasks.", exception);
         }
     }
 
     /** Saves all tasks, replacing the previous contents of the data file. */
     public void save(TaskList taskList) {
         if (!canSave) {
-            throw new MimiMeowException("Mimi cannot save changes because the existing data could not be loaded. "
+            throw new StorageException("Mimi cannot save changes because the existing data could not be loaded. "
                     + "Fix the data file and restart MimiMeow first.");
         }
 
@@ -73,7 +77,7 @@ public class Storage {
             replaceDataFile(temporaryFile);
         } catch (IOException | SecurityException exception) {
             deleteTemporaryFile(temporaryFile);
-            throw new MimiMeowException("Mimi could not save the task list.", exception);
+            throw new StorageException("Mimi could not save the task list.", exception);
         }
     }
 
@@ -188,8 +192,8 @@ public class Storage {
     }
 
     /** Creates a consistent user-facing error for malformed stored data. */
-    private MimiMeowException createCorruptedDataException(int lineNumber, String reason) {
-        return new MimiMeowException("Mimi could not understand saved task on line "
+    private DataFormatException createCorruptedDataException(int lineNumber, String reason) {
+        return new DataFormatException("Mimi could not understand saved task on line "
                 + lineNumber + ": " + reason + ".");
     }
 }

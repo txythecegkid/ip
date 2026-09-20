@@ -6,11 +6,12 @@ This file records the command-line UI test cases for the project. Run the cases 
 
 ### TC-001: Save added and updated tasks
 
-- **Aim:** Verify that adding each task type and marking a task produces the expected UI responses and saves the latest task state to the data file.
+- **Aim:** Verify that an invalid task is rejected and that adding and marking valid tasks saves the latest state.
 - **Precondition:** `data/mimimeow.txt` does not exist.
 - **Allowed differences:** Platform-specific line endings and trailing whitespace in the decorative banner or blank output lines may be ignored.
 - **Inputs:**
   ```text
+  todo
   todo compare A | B \ C
   deadline return book /by June 6th
   event project meeting /from Aug 6th 2pm /to Aug 6th 4pm
@@ -32,6 +33,9 @@ This file records the command-line UI test cases for the project. Run the cases 
       What can I do for you?
       ────────────────────────────────────────────────────────────
 
+      ────────────────────────────────────────────────────────────
+      Miiiision impossible! A task needs a description.
+      ────────────────────────────────────────────────────────────
       ────────────────────────────────────────────────────────────
       (^._.^) meows: Got it! Meow'hv added this task:
       [T][ ] compare A | B \ C

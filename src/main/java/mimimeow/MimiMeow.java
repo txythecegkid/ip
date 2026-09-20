@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import mimimeow.command.CommandHandler;
 import mimimeow.command.CommandParser;
-import mimimeow.command.MimiMeowException;
+import mimimeow.exception.MimiMeowException;
 import mimimeow.storage.Storage;
 import mimimeow.task.TaskList;
 import mimimeow.ui.MimiMeowUi;

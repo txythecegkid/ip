@@ -3,7 +3,16 @@ package mimimeow.command;
 
 /** Converts raw user input into structured MimiMeow commands. */
 public class CommandParser {
-    /** Parses a line into its command word and optional arguments. */
+    /** Creates a command parser. */
+    public CommandParser() {
+    }
+
+    /**
+     * Parses a line into its command word and optional arguments.
+     *
+     * @param userInput raw user input
+     * @return parsed command
+     */
     public Command parse(String userInput) {
         String[] commandParts = userInput.trim().split("\\s+", 2);
         String commandWord = commandParts[0];

@@ -21,12 +21,20 @@ public class Storage {
     private final Path filePath;
     private boolean canSave = true;
 
-    /** Creates storage that writes task data to the specified path. */
+    /**
+     * Creates storage that writes task data to the specified path.
+     *
+     * @param filePath path of the task data file
+     */
     public Storage(Path filePath) {
         this.filePath = filePath;
     }
 
-    /** Loads all tasks from the data file, or returns an empty list when the file does not exist. */
+    /**
+     * Loads all tasks from the data file, or returns an empty list when the file does not exist.
+     *
+     * @return loaded task list
+     */
     public TaskList load() {
         TaskList taskList = new TaskList();
         try {
@@ -55,7 +63,11 @@ public class Storage {
         }
     }
 
-    /** Saves all tasks, replacing the previous contents of the data file. */
+    /**
+     * Saves all tasks, replacing the previous contents of the data file.
+     *
+     * @param taskList task list to save
+     */
     public void save(TaskList taskList) {
         if (!canSave) {
             throw new StorageException("Mimi cannot save changes because the existing data could not be loaded. "

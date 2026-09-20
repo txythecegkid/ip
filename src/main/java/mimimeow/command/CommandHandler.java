@@ -22,11 +22,27 @@ public class CommandHandler {
     private final Storage storage;
     private final Clock clock;
 
-    /** Creates a command handler with the supplied application components. */
+    /**
+     * Creates a command handler with the supplied application components.
+     *
+     * @param taskList task list to manage
+     * @param commandParser parser for user commands
+     * @param ui user interface for responses
+     * @param storage persistent task storage
+     */
     public CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui, Storage storage) {
         this(taskList, commandParser, ui, storage, Clock.systemDefaultZone());
     }
 
+    /**
+     * Creates a command handler that obtains the current date and time from the specified clock.
+     *
+     * @param taskList task list to manage
+     * @param commandParser parser for user commands
+     * @param ui user interface for responses
+     * @param storage persistent task storage
+     * @param clock source of the current date and time
+     */
     CommandHandler(TaskList taskList, CommandParser commandParser, MimiMeowUi ui, Storage storage, Clock clock) {
         this.taskList = taskList;
         this.commandParser = commandParser;
@@ -35,7 +51,12 @@ public class CommandHandler {
         this.clock = clock;
     }
 
-    /** Executes a command and returns whether MimiMeow should exit. */
+    /**
+     * Executes a command and returns whether MimiMeow should exit.
+     *
+     * @param userInput raw command entered by the user
+     * @return true if the application should exit
+     */
     public boolean execute(String userInput) {
         ui.showSeparator();
         try {
@@ -89,11 +110,13 @@ public class CommandHandler {
         return false;
     }
 
+    /** Creates and saves a todo from the supplied command arguments. */
     private void addTodo(String commandArguments) {
         String description = commandArguments.trim();
         addTaskAndReply(new Todo(description));
     }
 
+    /** Displays scheduled tasks that occur on the current date. */
     private void showTodayTasks() {
         ui.showScheduledTasks(
                 taskList.findTasksOccurringOn(LocalDate.now(clock)),
@@ -101,6 +124,7 @@ public class CommandHandler {
                 "There are no tasks scheduled for today.");
     }
 
+    /** Displays incomplete scheduled tasks that have not started or become due. */
     private void showUpcomingTasks() {
         ui.showScheduledTasks(
                 taskList.findUpcomingTasks(LocalDateTime.now(clock)),
@@ -108,6 +132,7 @@ public class CommandHandler {
                 "There are no upcoming tasks.");
     }
 
+    /** Displays incomplete deadlines whose due times have passed. */
     private void showOverdueTasks() {
         ui.showScheduledTasks(
                 taskList.findOverdueTasks(LocalDateTime.now(clock)),
@@ -115,12 +140,15 @@ public class CommandHandler {
                 "There are no overdue deadlines.");
     }
 
+    /** Parses, creates, and saves a deadline from the supplied command arguments. */
+
     private void findTasks(String keyword) {
         if (keyword.isBlank()) {
             throw new CommandException("Mimi needs a keyword to find tasks.");
         }
         ui.showMatchingTasks(taskList.findTasks(keyword));
     }
+
 
     private void addDeadline(String commandArguments) {
         String[] deadlineParts = commandArguments.split("\\s*/by\\s+", 2);
@@ -132,6 +160,7 @@ public class CommandHandler {
         addTaskAndReply(new Deadline(description, deadlineDate));
     }
 
+    /** Parses, creates, and saves an event from the supplied command arguments. */
     private void addEvent(String commandArguments) {
         String[] eventParts = commandArguments.split("\\s*/from\\s+", 2);
         if (eventParts.length < 2) {
@@ -148,6 +177,7 @@ public class CommandHandler {
         addTaskAndReply(new Event(description, startTime, endTime));
     }
 
+    /** Adds and saves a task, rolling back the addition if saving fails. */
     private void addTaskAndReply(Task task) {
         taskList.add(task);
         try {
@@ -159,6 +189,7 @@ public class CommandHandler {
         ui.showTaskAdded(task, taskList.size());
     }
 
+    /** Updates and saves a task's completion status, restoring it if saving fails. */
     private void updateTaskStatus(String taskNumberText, boolean isDone) {
         if (taskNumberText.isEmpty()) {
             throw new CommandException("Mimi needs a task number, meow.");
@@ -192,6 +223,7 @@ public class CommandHandler {
         ui.showTaskStatus(task, isDone);
     }
 
+    /** Deletes and saves a task, restoring it at its original position if saving fails. */
     private void deleteTask(String taskNumberText) {
         if (taskNumberText.isEmpty()) {
             throw new CommandException("Mimi needs a task number, meow.");

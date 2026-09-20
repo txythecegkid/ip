@@ -27,6 +27,7 @@ public class Event extends Task implements ScheduledTask {
         }
     }
 
+    /** Returns this event in the storage format. */
     @Override
     public String toFileString() {
         return "E | " + super.toFileString() + " | "
@@ -34,26 +35,31 @@ public class Event extends Task implements ScheduledTask {
                 + escapeFileField(endTime.toFileString());
     }
 
+    /** Returns whether this event overlaps the specified date. */
     @Override
     public boolean occursOn(LocalDate date) {
         return !date.isBefore(startTime.toLocalDate()) && !date.isAfter(endTime.toLocalDate());
     }
 
+    /** Returns whether this event starts at or after the specified date and time. */
     @Override
     public boolean isUpcomingAt(LocalDateTime dateTime) {
         return !startTime.isBefore(dateTime);
     }
 
+    /** Returns false because events are not treated as overdue tasks. */
     @Override
     public boolean isOverdueAt(LocalDateTime dateTime) {
         return false;
     }
 
+    /** Returns the event start time used for chronological ordering. */
     @Override
     public TaskDateTime getScheduleTime() {
         return startTime;
     }
 
+    /** Returns this event in the user-facing display format. */
     @Override
     public String toString() {
         return "[E]" + super.toString()
